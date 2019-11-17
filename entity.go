@@ -7,18 +7,34 @@ type Component interface {
 	Name() (name string)
 }
 
-// Entity is simply a composition of one or more components with an id.
-type Entity struct {
-	Components []Component
-	Id string
+// entity is simply a composition of one or more components with an id.
+type entity struct {
+	Components map[string]Component
+	Name       string
+	ID         int64
 }
 
-// Get a specific component by name.
-func (e *Entity) Get(name string) Component {
-	for _, c := range e.Components {
-		if c.Name() == name {
-			return c
-		}
+// Checks for existence of a component
+func (e *entity) Has(name string) bool {
+	if _, contains := e.Components[name]; contains {
+		return true
 	}
+
+	return false
+}
+
+// Get a specific component by name, will return nil if the component doesn't exists
+func (e *entity) Get(name string) Component {
+	if e.Has(name) {
+		return e.Components[name]
+	}
+
 	return nil
+}
+
+// Add a component.
+func (e *entity) Add(components ...Component) {
+	for _, component := range components {
+		e.Components[component.Name()] = component
+	}
 }

@@ -2,31 +2,42 @@ package ecs
 
 // EntityManager handles the access to each entity.
 type EntityManager struct {
-	entities []*Entity
+	entities []*entity
 	index []int
+	entityID int64
 }
 
 // NewEntityManager creates a new EntityManager and returns its address.
 func NewEntityManager() *EntityManager {
 	return &EntityManager{
-		entities: []*Entity{},
+		entities: []*entity{},
 	}
+}
+
+// Builds a new entity
+func (m *EntityManager) NewEntity(name string) *entity {
+	entity := &entity{Components: map[string]Component{}, Name: name, ID: m.getNextID(),}
+	m.add(entity)
+	return entity
+}
+
+func (m *EntityManager) getNextID() int64 {
+	m.entityID = m.entityID + 1
+	return m.entityID
 }
 
 // Add entries to the manager.
-func (m *EntityManager) Add(entities ...*Entity) {
-	for _, entity := range entities {
-		m.entities = append(m.entities, entity)
-	}
+func (m *EntityManager) add(entity *entity) {
+	m.entities = append(m.entities, entity)
 }
 
 // Entities returns all the entities.
-func (m *EntityManager) Entities() (entities []*Entity) {
+func (m *EntityManager) Entities() (entities []*entity) {
 	return m.entities
 }
 
 // FilterBy returns the mapped entities, which components name matched.
-func (m *EntityManager) FilterBy(components ...string) (entities []*Entity) {
+func (m *EntityManager) FilterBy(components ...string) (entities []*entity) {
 	for _, e := range m.entities {
 		count := 0
 		wanted := len(components)
@@ -47,9 +58,9 @@ func (m *EntityManager) FilterBy(components ...string) (entities []*Entity) {
 }
 
 // Get a specific entity by id.
-func (m *EntityManager) Get(id string) (entity *Entity) {
+func (m *EntityManager) Get(name string) (entity *entity) {
 	for _, e := range m.entities {
-		if e.Id == id {
+		if e.Name == name {
 			return e
 		}
 	}
@@ -57,9 +68,9 @@ func (m *EntityManager) Get(id string) (entity *Entity) {
 }
 
 // Remove a specific entity.
-func (m *EntityManager) Remove(entity *Entity) {
+func (m *EntityManager) Remove(entity *entity) {
 	for i, e := range m.entities {
-		if e.Id == entity.Id {
+		if e.Name == entity.Name {
 			copy(m.entities[i:], m.entities[i+1:])
 			m.entities[len(m.entities)-1] = nil
 			m.entities = m.entities[:len(m.entities)-1]
