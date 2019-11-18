@@ -31,7 +31,7 @@ A **System** handles the behaviour or logic of the components. A movement system
 
 **From Source**
 
-    go get -u github.com/andygeiss/ecs
+    go get -u github.com/Gamerfiend/ecs
 
 ## Usage
 
