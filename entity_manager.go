@@ -57,6 +57,23 @@ func (m *EntityManager) FilterBy(components ...string) (entities []*entity) {
 	return
 }
 
+func (m *EntityManager) FilterByTags(tags ...string) (entities []*entity) {
+	for _, entity := range m.entities {
+		count := 0
+		wanted := len(tags)
+		for _, tag := range tags {
+			if entity.HasTag(tag) {
+				count++
+			}
+		}
+
+		if count == wanted {
+			entities = append(entities, entity)
+		}
+	}
+	return
+}
+
 // Get a specific entity by id.
 func (m *EntityManager) Get(name string) (entity *entity) {
 	for _, e := range m.entities {

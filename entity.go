@@ -10,6 +10,7 @@ type Component interface {
 // entity is simply a composition of one or more components with an id.
 type entity struct {
 	Components map[string]Component
+	Tags       map[string]bool
 	Name       string
 	ID         int64
 }
@@ -37,4 +38,26 @@ func (e *entity) Add(components ...Component) {
 	for _, component := range components {
 		e.Components[component.Name()] = component
 	}
+}
+
+func (e *entity) AddTag(tags ...string) {
+	for _, tag := range tags {
+		if !e.HasTag(tag) {
+			e.Tags[tag] = true
+		}
+	}
+}
+
+func (e *entity) RemoveTag(tag string) {
+	if e.HasTag(tag) {
+		e.Tags[tag] = false
+	}
+}
+
+func (e *entity) HasTag(name string) bool {
+	if _, contains := e.Tags[name]; contains {
+		return e.Tags[name]
+	}
+
+	return false
 }
