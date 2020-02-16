@@ -16,7 +16,7 @@ func NewEntityManager() *EntityManager {
 
 // Builds a new entity
 func (m *EntityManager) NewEntity(name string) *entity {
-	entity := &entity{Components: map[string]Component{}, Name: name, ID: m.getNextID(),}
+	entity := &entity{Components: map[string]Component{}, Name: name, ID: m.getNextID(), Tags: map[string]bool{}}
 	m.add(entity)
 	return entity
 }

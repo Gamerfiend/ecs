@@ -48,6 +48,12 @@ func (e *entity) AddTag(tags ...string) {
 	}
 }
 
+func (e *entity) Remove(component string) {
+	if e.Has(component) {
+		delete(e.Components, component)
+	}
+}
+
 func (e *entity) RemoveTag(tag string) {
 	if e.HasTag(tag) {
 		e.Tags[tag] = false
