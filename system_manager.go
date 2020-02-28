@@ -18,6 +18,7 @@ func NewSystemManager() *SystemManager {
 func (m *SystemManager) Add(systems ...System) {
 	for _, system := range systems {
 		m.systems[system.Name()] = system
+		m.isPaused[system.Name()] = false
 	}
 }
 
