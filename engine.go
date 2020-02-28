@@ -18,22 +18,33 @@ func NewEngine(entityManager *EntityManager, systemManager *SystemManager) *Engi
 // Run calls the Process() method for each System
 // until ShouldEngineStop is set to true.
 func (e *Engine) Run() {
-	for _, system := range e.systemManager.Systems() {
-		system.Process(e.entityManager)
+	systems, isPaused := e.systemManager.Systems()
+	for name, system := range systems {
+		if isPaused[name] {
+			system.Process(e.entityManager)
+		}
 	}
 }
 
 // Setup calls the Setup() method for each System
 // and initializes ShouldEngineStop and ShouldEnginePause with false.
 func (e *Engine) Setup() {
-	for _, sys := range e.systemManager.Systems() {
+	systems, _ := e.systemManager.Systems()
+	for _, sys := range systems {
 		sys.Setup()
 	}
 }
 
-// Teardown calls the Teardown(= method for each System.
+// Teardown calls the Teardown() method for each System.
 func (e *Engine) Teardown() {
-	for _, sys := range e.systemManager.Systems() {
+	systems, _ := e.systemManager.Systems()
+	for _, sys := range systems {
 		sys.Teardown()
 	}
 }
+
+
+func (e *Engine) PauseSystem(systemType string) {
+	e.systemManager.Pause(systemType)
+}
+

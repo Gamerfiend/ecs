@@ -6,4 +6,5 @@ type System interface {
 	Setup()
 	Process(entityManager *EntityManager)
 	Teardown()
+	Name() string
 }
