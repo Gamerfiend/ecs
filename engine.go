@@ -17,8 +17,8 @@ func NewEngine(entityManager *EntityManager, systemManager *SystemManager) *Engi
 
 // Run calls the Process() method for each System unless the System is paused.
 func (e *Engine) Run() {
-	for name, system := range e.systemManager.systems {
-		if !e.systemManager.isPaused[name] {
+	for _, system := range e.systemManager.systems {
+		if !e.systemManager.isPaused[system.Name()] {
 			system.Process(e.entityManager)
 		}
 	}
