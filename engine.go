@@ -1,7 +1,7 @@
 package ecs
 
 // Engine is simple a composition of an EntityManager and a SystemManager.
-// It handles the stages Setup(), Run() and Teardown() for all the systems.
+// It handles the stages Setup(), Process() and Teardown() for all the systems.
 type Engine struct {
 	entityManager *EntityManager
 	systemManager *SystemManager
@@ -15,8 +15,7 @@ func NewEngine(entityManager *EntityManager, systemManager *SystemManager) *Engi
 	}
 }
 
-// Run calls the Process() method for each System
-// until ShouldEngineStop is set to true.
+// Run calls the Process() method for each System unless the System is paused.
 func (e *Engine) Run() {
 	for name, system := range e.systemManager.systems {
 		if !e.systemManager.isPaused[name] {
@@ -26,7 +25,6 @@ func (e *Engine) Run() {
 }
 
 // Setup calls the Setup() method for each System
-// and initializes ShouldEngineStop and ShouldEnginePause with false.
 func (e *Engine) Setup() {
 	for _, sys := range e.systemManager.systems {
 		sys.Setup()

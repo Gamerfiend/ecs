@@ -34,7 +34,6 @@ func (m *SystemManager) Resume(systemName string) {
 	}
 }
 
-
 // Systems returns the system, which are internally stored.
 func (m *SystemManager) Systems() (map[string]System, map[string]bool) {
 	return m.systems, m.isPaused
