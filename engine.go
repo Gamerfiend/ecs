@@ -38,8 +38,12 @@ func (e *Engine) Teardown() {
 	}
 }
 
-
-func (e *Engine) PauseSystem(systemType string) {
-	e.systemManager.Pause(systemType)
+// SystemManager returns a pointer to this Engine's SystemManager
+func (e *Engine) SystemManager() *SystemManager {
+	return e.systemManager
 }
 
+// EntityManager returns a pointer to this Engine's EntityManager0
+func (e *Engine) EntityManager() *EntityManager {
+	return e.entityManager
+}
